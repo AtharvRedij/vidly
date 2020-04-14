@@ -7,6 +7,7 @@ import { getGenres } from "../services/fakeGenreService";
 import { paginate } from "../utils/paginate";
 import _ from "lodash";
 import { Link } from "react-router-dom";
+import Input from "./common/input";
 
 class Movies extends Component {
   state = {
@@ -15,6 +16,8 @@ class Movies extends Component {
     currentPage: 1,
     pageSize: 4,
     sortColumn: { path: "title", order: "asc" },
+    searchQuery: "",
+    selectedGenre: null,
   };
 
   componentDidMount() {
@@ -41,11 +44,20 @@ class Movies extends Component {
   };
 
   handleGenreSelect = (genre) => {
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    this.setState({ selectedGenre: genre, currentPage: 1, searchQuery: "" });
   };
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
+  };
+
+  handleSearch = (event) => {
+    const { currentTarget: input } = event;
+    this.setState({
+      selectedGenre: null,
+      currentPage: 1,
+      searchQuery: input.value,
+    });
   };
 
   getPagedData = () => {
@@ -55,12 +67,16 @@ class Movies extends Component {
       sortColumn,
       selectedGenre,
       movies: allMovies,
+      searchQuery,
     } = this.state;
 
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-        : allMovies;
+    const filtered = searchQuery
+      ? allMovies.filter((m) =>
+          m.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : selectedGenre && selectedGenre._id
+      ? allMovies.filter((m) => m.genre._id === selectedGenre._id)
+      : allMovies;
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
@@ -96,6 +112,14 @@ class Movies extends Component {
           </Link>
 
           <p>Showing {totalCount} movies in the database.</p>
+
+          <Input
+            type="text"
+            name="search"
+            label="Search"
+            value={this.state.searchQuery}
+            onChange={this.handleSearch}
+          />
 
           <MoviesTable
             movies={movies}
