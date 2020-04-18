@@ -11,13 +11,21 @@ import LoginForm from "./components/loginForm";
 import RegistrationForm from "./components/registrationForm";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getCurrentUser } from "./services/authService";
+import ProtectedRoute from "./components/common/protectedRoute";
 
 class App extends Component {
+  state = {};
+
+  componentDidMount() {
+    this.setState({ user: getCurrentUser() });
+  }
+
   render() {
     return (
       <React.Fragment>
         <ToastContainer />
-        <NavBar />
+        <NavBar user={this.state.user} />
         <main className="container">
           <Switch>
             <Route path="/login" component={LoginForm} />
@@ -25,8 +33,11 @@ class App extends Component {
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
             <Route path="/not-found" component={NotFound} />
-            <Route path="/movies/:id" component={MovieForm} />
-            <Route path="/movies" component={Movies} />
+            <ProtectedRoute path="/movies/:id" componet={MovieForm} />
+            <Route
+              path="/movies"
+              render={(props) => <Movies {...props} user={this.state.user} />}
+            />
             <Redirect from="/" exact to="/movies" />
             <Redirect to="/not-found" />
           </Switch>
