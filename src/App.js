@@ -1,18 +1,18 @@
 import React, { Component } from "react";
-import Movies from "./components/movies";
-import "./App.css";
-import NavBar from "./components/navbar";
 import { Route, Switch, Redirect } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import Movies from "./components/movies";
+import NavBar from "./components/navbar";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import NotFound from "./components/notFound";
 import MovieForm from "./components/movieForm";
 import LoginForm from "./components/loginForm";
 import RegistrationForm from "./components/registrationForm";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { getCurrentUser } from "./services/authService";
 import ProtectedRoute from "./components/common/protectedRoute";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
 
 class App extends Component {
   state = {};
