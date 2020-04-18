@@ -1,16 +1,15 @@
 import http from "./httpService";
-import { apiUrl } from "../config.json";
 
 export const getMovie = (movieId) => {
-  return http.get(apiUrl + "/movies/" + movieId);
+  return http.get("/movies/" + movieId);
 };
 
 export const getMovies = () => {
-  return http.get(apiUrl + "/movies");
+  return http.get("/movies");
 };
 
 export const deleteMovie = (movieId) => {
-  return http.delete(apiUrl + "/movies/" + movieId);
+  return http.delete("/movies/" + movieId);
 };
 
 export const saveMovie = (movie) => {
@@ -18,8 +17,8 @@ export const saveMovie = (movie) => {
     const body = { ...movie };
     delete body._id;
 
-    http.put(apiUrl + "/movies/" + movie._id, body);
+    http.put("/movies/" + movie._id, body);
   } else {
-    http.post(apiUrl + "/movies", movie);
+    http.post("/movies", movie);
   }
 };
